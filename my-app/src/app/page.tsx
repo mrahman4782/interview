@@ -45,37 +45,40 @@ export default function Home() {
     setPhone("");
   };
 
- const handleSubmit = async (e: any) => {
-  e.preventDefault();
-  const entry = `${name}: ${phone}`;
-  setCalls(prev => [...prev, entry]);
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    const entry = `${name}: ${phone}`;
+    setCalls((prev) => [...prev, entry]);
 
-  try {
-    const res = await fetch("/api/call", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        number: phone, // match your backend key: `number`
-      }),
-    });
+    try {
+      const res = await fetch("/api/call", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          number: phone,
+        }),
+      });
 
-    if (!res.ok) {
-      const errorData = await res.json();
-      console.error("API call failed:", errorData);
-    } else {
-      const result = await res.json();
-      console.log("Call initiated:", result);
+      if (!res.ok) {
+        const errorData = await res.json();
+        console.error("API call failed:", errorData);
+      } else {
+        const result = await res.json();
+        console.log("Call initiated:", result);
+      }
+    } catch (err) {
+      console.error("Error contacting API:", err);
     }
-  } catch (err) {
-    console.error("Error contacting API:", err);
-  }
 
-  closeForm();
-};
+    closeForm();
+  };
 
+  const handleDelete = (indexToDelete: number) => {
+    setCalls((prev) => prev.filter((_, idx) => idx !== indexToDelete));
+  };
 
   return (
     <main className="container mx-auto p-4">
@@ -109,8 +112,19 @@ export default function Home() {
               {calls.length > 0 ? (
                 <ul className="space-y-2">
                   {calls.map((call, idx) => (
-                    <li key={idx} className="p-2 border rounded">
-                      {call}
+                    <li
+                      key={idx}
+                      className="p-2 border rounded flex justify-between items-center"
+                    >
+                      <span>{call}</span>
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => handleDelete(idx)}
+                        className="ml-2"
+                      >
+                        Delete
+                      </Button>
                     </li>
                   ))}
                 </ul>
@@ -139,7 +153,7 @@ export default function Home() {
                 id="name"
                 type="text"
                 value={name}
-                onChange={e => setName(e.target.value)}
+                onChange={(e) => setName(e.target.value)}
                 className="w-full border px-3 py-2 rounded"
                 required
               />
@@ -152,7 +166,7 @@ export default function Home() {
                 id="phone"
                 type="tel"
                 value={phone}
-                onChange={e => setPhone(e.target.value)}
+                onChange={(e) => setPhone(e.target.value)}
                 className="w-full border px-3 py-2 rounded"
                 required
               />

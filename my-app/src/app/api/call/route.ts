@@ -17,9 +17,10 @@ export async function POST(request: NextRequest){
         }
         
         const reqBody = {
-            phoneNumberId: "c56750bc-733d-4179-ae3b-7caaa6b2ba3c",
+            phoneNumberId: "fca84e1e-2b84-4ac1-b53c-a5e8df8b97f8",
             customer: {number: body.number},
-            assistantId: "30a86254-372d-405b-827d-4192e1b2723f"
+            assistantId: "0489a3ae-048c-4e9f-958d-69ca20e4f8af",
+            //webhook: "https://59d499bde303.ngrok-free.app/api/vapi-webhook"
         }
         const vapi = new VapiClient({
             token: process.env.VAPI_PRIV_KEY as string

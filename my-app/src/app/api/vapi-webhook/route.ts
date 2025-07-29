@@ -1,17 +1,16 @@
-// app/api/vapi-webhook/route.ts
-
 import { NextRequest, NextResponse } from "next/server";
+
+let callStatuses: Record<string, string> = {};
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-
-  const event = body.event;
-  const data = body.data;
+  const { event, data } = body;
 
   if (event === "call.updated") {
-    console.log("Call status changed:", data.callId, data.status);
-
+    console.log("Call updated:", data.callId, data.status);
+    callStatuses[data.callId] = data.status;
   }
 
   return NextResponse.json({ received: true });
 }
+export { callStatuses };

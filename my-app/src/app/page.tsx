@@ -17,7 +17,6 @@ export default function Home() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
 
-  // Load persisted calls on mount
   useEffect(() => {
     try {
       const stored = localStorage.getItem("calls");
@@ -29,7 +28,6 @@ export default function Home() {
     }
   }, []);
 
-  // Save calls whenever they change
   useEffect(() => {
     try {
       localStorage.setItem("calls", JSON.stringify(calls));
